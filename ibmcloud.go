@@ -21,10 +21,14 @@ type Cli interface {
 
 func (source *Source) Login(tracelog Trace) error {
 
-	//ibmcloud login -a cloud.ibm.com  -r eu-gb -u lorand.somogyi@plensys.com -c 491ef54961eec93da2b9fe91fe3e0090 -g mohosz -p pwd
+	region := "eu-gb"
+	if len(source.Region) > 0 {
+		region = source.Region
+	}
+
 	pars := []string {"login",
 		"-a cloud.ibm.com",
-		fmt.Sprintf("-r %s", source.Region),
+		fmt.Sprintf("-r %s", region),
 		fmt.Sprintf("-u %s", source.Username),
 		fmt.Sprintf("-p %s", source.Password),
 	}
