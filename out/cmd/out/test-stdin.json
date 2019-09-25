@@ -1,0 +1,17 @@
+{
+  "source": {
+    "url" : "https://repo.mee.de/repository/ci-results/test",
+    "username" : "myuser",
+    "password" : "mypass",
+    "verbose"  : false
+  },
+  "params" : {
+    "from" : "build",
+    "from-re-filter" : ".*/reports/.*",
+    "to" : "bikarbonat/{{.USER}}/2/"
+  },
+  "tags": [
+    "tag1",
+    "tag2"
+  ]
+}
