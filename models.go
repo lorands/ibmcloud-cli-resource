@@ -3,7 +3,8 @@ package resource
 import "time"
 
 type Source struct {
-	Region        string `json:"region"`
+	ApiEndpoint   string `json:"api,omitempty"`
+	Region        string `json:"region,omitempty"`
 	ResourceGroup string `json:"resource_group,omitempty"`
 	Username      string `json:"username"`
 	Password      string `json:"password"`

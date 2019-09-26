@@ -35,7 +35,7 @@ func Run(sourceDir string, stdin io.Reader, doLogin bool) error {
 		}
 	}
 
-	pars := []string{request.Params.Cmd, request.Params.SCmd}
+	pars := resource.CliParams{request.Params.Cmd, request.Params.SCmd}
 	for _, p := range request.Params.PParams {
 		pars = append(pars, resource.ProcessTemplate(p))
 	}
@@ -47,7 +47,7 @@ func Run(sourceDir string, stdin io.Reader, doLogin bool) error {
 		tracelog("work file is %s\n", workFile)
 	}
 
-	if err := resource.IbmCloudCliRun(pars, workFile, tracelog); err != nil {
+	if err := pars.IbmCloudCliRun(workFile, tracelog); err != nil {
 		return err
 	}
 

@@ -13,11 +13,12 @@ import (
 
 type Trace func(message string, args ...interface{})
 
+type CliParams []string
+
 type Cli interface {
 	Login(tracelog Trace) error
-	IbmCloudCliRun(pars []string, workFile string, tracelog Trace) error
+	IbmCloudCliRun(workFile string, tracelog Trace) error
 }
-
 
 func (source *Source) Login(tracelog Trace) error {
 
@@ -26,31 +27,44 @@ func (source *Source) Login(tracelog Trace) error {
 		region = source.Region
 	}
 
-	pars := []string {"login",
-		"-a cloud.ibm.com",
-		fmt.Sprintf("-r %s", region),
-		fmt.Sprintf("-u %s", source.Username),
-		fmt.Sprintf("-p %s", source.Password),
+	pars := CliParams {"login",
+		"-u", source.Username,
+		"-p", source.Password,
+	}
+
+	if len(source.ApiEndpoint) > 0  {
+		pars = append(pars, "-a", source.AccountId)
+	} else {
+		pars = append(pars, "-a", "https://cloud.ibm.com")
+	}
+
+	if len(source.Region) > 0 {
+		pars = append(pars, "-r", region)
 	}
 
 	if len(source.AccountId)>0 {
-		pars = append(pars, source.AccountId)
+		pars = append(pars, "-c", source.AccountId)
 	}
 	if len(source.ResourceGroup) > 0 {
-		pars = append(pars, source.ResourceGroup)
+		pars = append(pars, "-g", source.ResourceGroup)
 	}
 
-	if err := IbmCloudCliRun(pars, "", tracelog); err != nil {
+	if err := pars.IbmCloudCliRun("", tracelog); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func IbmCloudCliRun(pars []string, workFile string, tracelog Trace) error {
+func (pars *CliParams) IbmCloudCliRun(workFile string, tracelog Trace) error {
 
 	tracelog("About to execute ibmcloud with params: %v", pars)
-	cmd := exec.Command("ibmcloud", pars...)
+	sz := len([]string(*pars))
+	strParams := make([]string, sz)
+	for i := 0; i < sz; i++ {
+		strParams[i] = (*pars)[i]
+	}
+	cmd := exec.Command("ibmcloud", strParams...)
 	var sout bytes.Buffer
 	cmd.Stdout = &sout
 	cmd.Stderr = os.Stderr
