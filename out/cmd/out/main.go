@@ -38,7 +38,7 @@ func Run(sourceDir string, stdin io.Reader, doLogin bool) error {
 
 	if doLogin {
 		//login
-		if err := request.Source.Login(tracelog); err != nil {
+		if err := request.Source.Login(notrace); err != nil {
 			return err
 		}
 	}
@@ -93,6 +93,9 @@ func outputResponse(response out.Response) {
 	}
 }
 
+func notrace(message string, args ...interface{}) {
+	//does nothing
+}
 func tracelog(message string, args ...interface{}) {
 	if trace {
 		_, _ = fmt.Fprintf(os.Stderr, message, args...)

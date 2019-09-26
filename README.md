@@ -48,17 +48,8 @@ Does nothing.
 
 ## GET
 
-Call an ibmcloud cli and stores the output of json to a file if requested. 
-Use this if there is no side effect.
+Does nothing.
 
-```yml
-  - get: bx-resource
-    resource: bx-dev
-    params:
-      command: resource
-      subcommand: groups
-      jsonOutputFile: myOutput.json
-```
 
 ## PUT
 
@@ -88,3 +79,11 @@ Use this if there is a side effect (resource created).
       - tag2
 ```
 
+```yml
+  - get: bx-resource
+    resource: bx-dev
+    params:
+      command: resource
+      subcommand: groups
+      jsonOutputFile: myOutput.json
+```
