@@ -10,19 +10,22 @@ given parameters (after a login) and pipes the output in json format to a file i
 
 Uses IBM Cloud client: https://cloud.ibm.com/docs/cli
 
-An output only resource capable of running IBM Cloud cli commands.
+An get only resource capable of running IBM Cloud cli commands. 
+
+Note: Reason for being a get and not put only resource is, that for getting the output of a put is only
+supported through the subsequent get, thus this would indicate a need of a persistent storage like s3, 
+which would complicate this resource a lot. 
 
 ## Source Configuration
 
 Note: you must provide either `username` and `password` or `client_id` and `client_secret`.
 
+* `api`: *Optional.* The IBM Cloud API. Defaults to https://cloud.ibm.com
 * `region`: *Optional.* The IBM Cloud region to use. Defaults to `eu-gb`
 * `username`: *Required.* The username used to authenticate.
 * `password`: *Required.* The password used to authenticate.
 * `account_id`: *Optional.* The account id used to authenticate.
 * `resource_group`: *Optional.* The resource group to use. Will use default defined by the account, usually 'Default'.
-* `org`: *Optional.* Sets the default organization to target (can be overridden in the params config).
-* `space`: *Optional.* Sets the default space to target (can be overridden in the params config).
 
 ```yml
 resource_types:
@@ -48,36 +51,14 @@ Does nothing.
 
 ## GET
 
-Does nothing.
-
-
-## PUT
-
 Call an ibmcloud cli and stores the output of json to a file if requested. 
-Use this if there is a side effect (resource created).
 
-```yml
-  - put: bx-resource
-    resource: bx-dev
-    params:
-      command: resource
-      subcommand: group-create
-      params:
-      - my-resource-group
-```
+* `command`: *Required.* The command to execute
+* `subcommand`: *Required.* Sub-command to execute
+* `params`: *Optional.* List of additional parameters to pass to ibmcloud cli.
+* `jsonOutputFile`: *Optional.* Set ibmcloud to produce a json output and feed it to a file by this name
 
-```yml
-  - put: bx-resource
-    resource: bx-dev
-    params:
-      command: resource
-      subcommand: group-create
-      params:
-      - my-resource-group
-      tags: 
-      - tag1
-      - tag2
-```
+Examples:
 
 ```yml
   - get: bx-resource
@@ -87,3 +68,20 @@ Use this if there is a side effect (resource created).
       subcommand: groups
       jsonOutputFile: myOutput.json
 ```
+
+```yml
+  - get: bx-resource
+    resource: bx-dev
+    params:
+      command: resource
+      subcommand: service-alias-create
+      jsonOutputFile: sac.json
+      params:
+      - my-service-alias
+      - --instance-name my-instance-11
+      - -s mySpace
+```
+
+## PUT
+
+Does nothing.
