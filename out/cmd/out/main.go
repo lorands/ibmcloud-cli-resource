@@ -33,32 +33,6 @@ func Run(sourceDir string, stdin io.Reader, doLogin bool) error {
 
 	trace = request.Source.Verbose
 
-	tracelog("Input directory set: %s.", sourceDir)
-	tracelog("Request params set: %v\n", request)
-
-	if doLogin {
-		//login
-		if err := request.Source.Login(resource.NoTrace); err != nil {
-			return err
-		}
-	}
-
-	pars := resource.CliParams{request.Params.Cmd, request.Params.SCmd}
-	for _, p := range request.Params.PParams {
-		pars = append(pars, resource.ProcessTemplate(p))
-	}
-
-	var workFile string
-	//if len(request.Params.JSONOutputFileStr) > 0 {
-	//	pars = append(pars, "--output=JSON")
-	//	workFile = sourceDir + "/" + request.Params.JSONOutputFileStr
-	//	tracelog("work file is %s\n", workFile)
-	//}
-
-	if err := pars.IbmCloudCliRun(workFile, tracelog); err != nil {
-		return err
-	}
-
 	metadata := make([]resource.MetadataPair, 1)
 	now := time.Now()
 	metadata[0] = resource.MetadataPair{
