@@ -11,10 +11,7 @@ type Request struct {
 
 type Params struct {
 	resource.Params
-	Tags Tags `json:"tags,omitempty"`
 }
-
-type Tags []string
 
 type Response struct {
 	Version  resource.Version        `json:"version"`

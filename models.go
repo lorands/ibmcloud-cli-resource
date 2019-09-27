@@ -22,10 +22,12 @@ type MetadataPair struct {
 }
 
 type Params struct {
-	Cmd               string  `json:"command"`
-	SCmd              string  `json:"subcommand"`
-	PParams           PParams `json:"params,omitempty"`
-	JSONOutputFileStr string  `json:"jsonOutputFile,omitempty"`
+	Cmd     string  `json:"command"`
+	SCmd    string  `json:"subcommand"`
+	PParams PParams `json:"params,omitempty"`
+	Tags    Tags    `json:"tags,omitempty"`
 }
+
+type Tags []string
 
 type PParams []string

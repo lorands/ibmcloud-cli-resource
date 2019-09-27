@@ -127,3 +127,6 @@ func Fatal(message string, err error) {
 	os.Exit(1)
 }
 
+func NoTrace(message string, args ...interface{}) {
+	//does nothing
+}
