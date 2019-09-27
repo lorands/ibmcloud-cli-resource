@@ -38,7 +38,7 @@ func Run(sourceDir string, stdin io.Reader, doLogin bool) error {
 
 	if doLogin {
 		//login
-		if err := request.Source.Login(notrace); err != nil {
+		if err := request.Source.Login(resource.NoTrace); err != nil {
 			return err
 		}
 	}
@@ -49,11 +49,11 @@ func Run(sourceDir string, stdin io.Reader, doLogin bool) error {
 	}
 
 	var workFile string
-	if len(request.Params.JSONOutputFileStr) > 0 {
-		pars = append(pars, "--output=JSON")
-		workFile = sourceDir + "/" + request.Params.JSONOutputFileStr
-		tracelog("work file is %s\n", workFile)
-	}
+	//if len(request.Params.JSONOutputFileStr) > 0 {
+	//	pars = append(pars, "--output=JSON")
+	//	workFile = sourceDir + "/" + request.Params.JSONOutputFileStr
+	//	tracelog("work file is %s\n", workFile)
+	//}
 
 	if err := pars.IbmCloudCliRun(workFile, tracelog); err != nil {
 		return err
@@ -93,9 +93,7 @@ func outputResponse(response out.Response) {
 	}
 }
 
-func notrace(message string, args ...interface{}) {
-	//does nothing
-}
+
 func tracelog(message string, args ...interface{}) {
 	if trace {
 		_, _ = fmt.Fprintf(os.Stderr, message, args...)
